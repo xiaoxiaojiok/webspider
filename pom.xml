@@ -19,6 +19,7 @@
         <module>webspider-store/</module>
         <module>webspider-web</module>
         <module>webspider-plugin</module>
+                                                                                                                                           <module>webspider-plugin</module>
     </modules>
     
 	<repositories>
