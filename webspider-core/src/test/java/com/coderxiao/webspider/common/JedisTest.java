@@ -37,7 +37,7 @@ public class JedisTest{
 	//简单测试远程redis缓存是否可用
 	public void testSimple() throws IOException {
 		
-		Jedis jedis = new Jedis("125.216.243.97",6379);  
+		Jedis jedis = new Jedis("222.201.145.200",6379);
 		String keys = "name";  
 		System.out.println(jedis.get(keys));  
 		// 删数据  

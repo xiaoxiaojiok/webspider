@@ -1,5 +1,5 @@
 #!/bin/bash
-docker rm -f webspider
-docker rmi -f webspider:1.0.0
+docker rm -f worker
+docker rmi -f worker:1.0.0
 
 

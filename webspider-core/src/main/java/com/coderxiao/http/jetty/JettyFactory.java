@@ -9,6 +9,8 @@ import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 public class JettyFactory {
 
+	public static final String PACKAGE = "com.coderxiao.http.servlet";
+
 	/**
 	 * 创建Jetty Server
 	 * 
@@ -28,7 +30,7 @@ public class JettyFactory {
 		context.setContextPath(contextPath);
 		ServletHolder sh = new ServletHolder(ServletContainer.class);
 		sh.setInitParameter("com.sun.jersey.config.property.resourceConfigClass","com.sun.jersey.api.core.PackagesResourceConfig");
-		sh.setInitParameter("com.sun.jersey.config.property.packages", "com.coderxiao.http.servlet");
+		sh.setInitParameter("com.sun.jersey.config.property.packages", PACKAGE);
 		context.addServlet(sh, "/*");
 
 		server.setHandler(context);

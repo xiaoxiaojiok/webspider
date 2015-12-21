@@ -1,8 +1,8 @@
 package com.coderxiao.webservice;
 
-import javax.xml.ws.Endpoint;
+import com.coderxiao.webspider.util.ConfigUtil;
 
-import com.coderxiao.webspider.util.ConfigUtilInstance;
+import javax.xml.ws.Endpoint;
 
 /**
  * 
@@ -12,7 +12,7 @@ import com.coderxiao.webspider.util.ConfigUtilInstance;
 public class SpiderServer {
 	
 	//得到WebService地址
-	private static final String ADDRESS = ConfigUtilInstance.getInstance().getWebserviceAddress();
+	private static final String ADDRESS = ConfigUtil.getInstance().getWebserviceAddress();
 	
 	private Endpoint spiderService;
     

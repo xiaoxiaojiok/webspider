@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t webspider:1.0.0 .
+docker build -t worker:1.0.0 .

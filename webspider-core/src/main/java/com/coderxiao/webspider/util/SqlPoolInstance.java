@@ -1,14 +1,16 @@
 package com.coderxiao.webspider.util;
 
-import java.io.InputStream;
+import com.coderxiao.zookeeper.directory.build.Directory;
+import com.coderxiao.zookeeper.directory.webspider.config.mysql.MysqlInfo;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 
 public class SqlPoolInstance {
 
@@ -31,14 +33,15 @@ class SqlPool {
 
 	static {
 		try {
-			InputStream is = SqlPool.class.getClassLoader()
+			Properties prop = new Properties();
+		/*	InputStream is = SqlPool.class.getClassLoader()
 					.getResourceAsStream("db.properties");
 			if (is == null) {
 				throw new IllegalArgumentException(
 						"[db.properties] is not found!");
 			}
-			Properties prop = new Properties();
-			prop.load(is);
+			prop.load(is);*/
+			prop.load(new ByteArrayInputStream(Directory.getData(MysqlInfo.MYSQL_PATH)));
 			HikariConfig config = new HikariConfig(prop);
 			ds = new HikariDataSource(config);
 		} catch (Exception e) {

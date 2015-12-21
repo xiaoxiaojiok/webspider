@@ -1,6 +1,6 @@
 package com.coderxiao.webspider.pipeline;
 
-import com.coderxiao.webspider.util.ConfigUtilInstance;
+import com.coderxiao.webspider.util.ConfigUtil;
 
 /***
  * pipeline factory
@@ -10,7 +10,7 @@ import com.coderxiao.webspider.util.ConfigUtilInstance;
  */
 public class PipelineFactory {
 	
-    private static final String PIPELINE_PATH = ConfigUtilInstance.getInstance().getPipeLinePath();
+    private static final String PIPELINE_PATH = ConfigUtil.getInstance().getPipeLinePath();
     
 	public static Pipeline createPipeline(String type){
 		if(type == null){

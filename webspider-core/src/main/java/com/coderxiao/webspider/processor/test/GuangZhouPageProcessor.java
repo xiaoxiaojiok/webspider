@@ -52,7 +52,7 @@ public class GuangZhouPageProcessor implements PageProcessor {
 		/**
 		 * 原则上一个站点就是一个Spider
 		 * 
-		 * 当同一个站点的时候，启动两个Spider，那么需要有一定间隔启动或者两个Spider的startUrls需要不同，负责另外一个会退出
+		 * 当同一个站点的时候，启动两个Spider，那么需要有一定间隔启动或者两个Spider的startUrls需要不同，否则另外一个会退出
 		 * 这是由于url被另外一个获取了，这样的话另外一个Spider一开始就获取不到url并且当前的活跃线程为0，所以退出
 		 * 
 		 * 

@@ -1,9 +1,9 @@
 package com.coderxiao.webspider.thread;
 
+import com.coderxiao.webspider.util.ConfigUtil;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import com.coderxiao.webspider.util.ConfigUtilInstance;
 
 /**
  * 
@@ -16,7 +16,7 @@ import com.coderxiao.webspider.util.ConfigUtilInstance;
 //第一种,Effective Java推荐
 public class ExecutorServiceInstance {
 	
-	private static int num = ConfigUtilInstance.getInstance().getWorkerThread();
+	private static int num = ConfigUtil.getInstance().getWorkerThread();
 	
 	private static class ExecutorServiceInstanceGet{
 		private static final ExecutorService instance = Executors.newFixedThreadPool(num);
@@ -35,7 +35,7 @@ public class ExecutorServiceInstance {
 	
 	private volatile static ExecutorService executorService;
 	
-	private static int num = ConfigUtilInstance.getInstance().getWorkerThread();
+	private static int num = ConfigUtil.getInstance().getWorkerThread();
 	
 	private ExecutorServiceInstance(){}
 	

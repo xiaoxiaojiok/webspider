@@ -1,10 +1,10 @@
 package com.coderxiao.webspider.util;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 public class ImageBase64Utils {
 	/**
@@ -17,8 +17,8 @@ public class ImageBase64Utils {
 	public static String GetImageStr(byte[] data) {
 		 
         //对字节数组Base64编码
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(data);//返回Base64编码过的字节数组字符串
+        Base64 encoder = new Base64();
+        return encoder.encodeToString(data);//返回Base64编码过的字节数组字符串
     }
  
 	/**
@@ -35,10 +35,10 @@ public class ImageBase64Utils {
         {
             return false;
         }
-        BASE64Decoder decoder = new BASE64Decoder();
+        Base64 decoder = new Base64();
         try {
             //Base64解码
-            byte[] b = decoder.decodeBuffer(imgStr);
+            byte[] b = decoder.decodeBase64(imgStr);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {//调整异常数据
                     b[i] += 256;

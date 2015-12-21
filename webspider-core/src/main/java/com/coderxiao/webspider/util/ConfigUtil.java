@@ -1,5 +1,7 @@
 package com.coderxiao.webspider.util;
 
+import com.coderxiao.zookeeper.util.ZooKeeperUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -11,7 +13,7 @@ import java.util.Properties;
 public class ConfigUtil {
 
 	private static Properties props = null;
-	
+
 	static{
 		InputStream is = ConfigUtil.class.getClassLoader().getResourceAsStream("config.properties");
 		if (is == null) {  
@@ -26,8 +28,14 @@ public class ConfigUtil {
 		}
 	}
 	
-	public ConfigUtil(){
-		
+	private ConfigUtil(){}
+
+	private static class ConfigUtilGet{
+		private static final ConfigUtil instance= new ConfigUtil();
+	}
+
+	public static ConfigUtil getInstance(){
+		return ConfigUtilGet.instance;
 	}
 
 	private String getConfig(String key) {
@@ -46,11 +54,14 @@ public class ConfigUtil {
 	}
 	
 	public int getWorkerThread(){
-		return Integer.parseInt(getConfig("worker.threads"));
+		return ZooKeeperUtil.one().getWorkerThread();
+//		return Integer.parseInt(getConfig("worker.threads"));
+
 	}
 	
 	public int getSpiderThread(){
-		return Integer.parseInt(getConfig("spider.thread"));
+		return ZooKeeperUtil.one().getSpiderThread();
+//		return Integer.parseInt(getConfig("spider.thread"));
 	}
 	
 	public String getWebserviceAddress(){
@@ -80,15 +91,19 @@ public class ConfigUtil {
 	}
 	
 	public int getRedisMaxIdel(){
-		return Integer.parseInt(getConfig("redis.pool.maxIdle"));
+		return ZooKeeperUtil.one().getRedisMaxIdel();
+//		return Integer.parseInt(getConfig("redis.pool.maxIdle"));
+
 	}
 	
 	public int getRedisMaxTotal(){
-		return Integer.parseInt(getConfig("redis.pool.maxTotal"));
+		return ZooKeeperUtil.one().getRedisMaxTotal();
+//		return Integer.parseInt(getConfig("redis.pool.maxTotal"));
 	}
 	
 	public long getRedisMaxWait(){
-		return Long.parseLong(getConfig("redis.pool.maxWait"));
+		return ZooKeeperUtil.one().getRedisMaxWait();
+//		return Long.parseLong(getConfig("redis.pool.maxWait"));
 	}
 	
 	public boolean getRedisTestOnBorrow(){
@@ -96,7 +111,8 @@ public class ConfigUtil {
 	}
 	
 	public String getRedisIP(){
-		return getConfig("redis.ip");
+		return ZooKeeperUtil.one().getRedisIP();
+//		return getConfig("redis.ip");
 	}
 	
 	public String getStorageType(){
@@ -135,8 +151,15 @@ public class ConfigUtil {
 		return getConfig("jetty.context");
 	}
 	
-	
 	public static void main(String[] args) {
 		System.out.println(new ConfigUtil().getCharsetRegex());
+	}
+
+	public String getZkAddress(){
+		return getConfig("zookeeper.address");
+	}
+
+	public int getZkTimeout(){
+		return Integer.parseInt(getConfig("zookeeper.timeout"));
 	}
 }

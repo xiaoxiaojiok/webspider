@@ -8,5 +8,6 @@
 *.war
 *.ear
 target/
+logs/
 .idea/
 .settings/

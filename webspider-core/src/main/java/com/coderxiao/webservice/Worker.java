@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 
 import javax.management.JMException;
 
+import com.coderxiao.webspider.util.ConfigUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,6 @@ import com.coderxiao.webspider.scheduler.RedisScheduler;
 import com.coderxiao.webspider.scheduler.ScheduleType;
 import com.coderxiao.webspider.scheduler.SchedulerInstance;
 import com.coderxiao.webspider.thread.ExecutorServiceInstance;
-import com.coderxiao.webspider.util.ConfigUtilInstance;
 
 /***
  * 
@@ -49,12 +49,12 @@ public class Worker {
 	 * 
 	 * 
 	 */
-	private static final int THREADNUM_PER_SPIDER = ConfigUtilInstance.getInstance().getSpiderThread();
+	private static final int THREAD_NUM_PER_SPIDER = ConfigUtil.getInstance().getSpiderThread();
 
 	/***
 	 * 存储方式
 	 */
-	private static final String STORAGE_TYPE = ConfigUtilInstance.getInstance().getStorageType();
+	private static final String STORAGE_TYPE = ConfigUtil.getInstance().getStorageType();
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -64,7 +64,7 @@ public class Worker {
 
 	private Worker() {
 		//将每个Worker提供的WebService地址放到全局队列中
-		redis.zadd(RedisScheduler.WEBSERVICE_KEY, ConfigUtilInstance.getInstance().getWebserviceAddress());
+//		redis.zadd(RedisScheduler.WEBSERVICE_KEY, ConfigUtil.getInstance().getWebserviceAddress());
 	}
 
 	public static Worker getInstance() {
@@ -81,7 +81,7 @@ public class Worker {
 	public boolean addSpider(Spider spider) {
 		spider.addPipeline(PipelineFactory.createPipeline(STORAGE_TYPE))
 				.setExecutorService(executorService).setScheduler(redis)
-				.thread(THREADNUM_PER_SPIDER);
+				.thread(THREAD_NUM_PER_SPIDER);
 		try {
 			SpiderMonitor.instance().register(spider);
 		} catch (JMException e) {
@@ -99,7 +99,7 @@ public class Worker {
 	 * <pre>
 	 * 通过id从Spider表中取出对应的Spider
 	 * </pre>
-	 * @param spider
+	 * @param id
 	 * @return
 	 */
 	public Spider getSpider(Long id) {

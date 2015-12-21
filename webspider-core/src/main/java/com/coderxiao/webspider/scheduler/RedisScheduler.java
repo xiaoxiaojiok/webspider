@@ -5,8 +5,8 @@ import java.util.Set;
 import com.alibaba.fastjson.JSON;
 import com.coderxiao.webspider.Request;
 import com.coderxiao.webspider.Task;
-import com.coderxiao.webspider.util.ConfigUtilInstance;
 
+import com.coderxiao.webspider.util.ConfigUtil;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -35,11 +35,11 @@ public class RedisScheduler implements MonitorableScheduler{
 	protected static final JedisPoolConfig jedisPoolConfig= new JedisPoolConfig();
     
 	static{
-		int maxIdel = ConfigUtilInstance.getInstance().getRedisMaxIdel();
-		int maxTotal = ConfigUtilInstance.getInstance().getRedisMaxTotal();
-		long maxWait = ConfigUtilInstance.getInstance().getRedisMaxWait();
-		boolean testOnBorrow = ConfigUtilInstance.getInstance().getRedisTestOnBorrow();
-		host = ConfigUtilInstance.getInstance().getRedisIP();
+		int maxIdel = ConfigUtil.getInstance().getRedisMaxIdel();
+		int maxTotal = ConfigUtil.getInstance().getRedisMaxTotal();
+		long maxWait = ConfigUtil.getInstance().getRedisMaxWait();
+		boolean testOnBorrow = ConfigUtil.getInstance().getRedisTestOnBorrow();
+		host = ConfigUtil.getInstance().getRedisIP();
     	jedisPoolConfig.setMaxIdle(maxIdel);
     	jedisPoolConfig.setMaxTotal(maxTotal);
     	jedisPoolConfig.setMaxWaitMillis(maxWait);
@@ -48,10 +48,6 @@ public class RedisScheduler implements MonitorableScheduler{
 
     public RedisScheduler(){
         pool = new JedisPool(jedisPoolConfig, host);
-        //先清空当前数据库
-/*      Jedis jedis = pool.getResource();
-        jedis.flushDB();
-        pool.returnResource(jedis);*/
     }
 
     @Override
@@ -221,4 +217,16 @@ public class RedisScheduler implements MonitorableScheduler{
         }
 		return total;
 	}
+
+    /**
+     * 清空当前数据库
+     */
+    public void flushDB() {
+        Jedis jedis = pool.getResource();
+        try{
+            jedis.flushDB();
+        }finally{
+            pool.returnResource(jedis);
+        }
+    }
 }

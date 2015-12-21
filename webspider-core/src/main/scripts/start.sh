@@ -1,5 +1,5 @@
 #!/bin/bash
-SERVER_NAME="com.coderxiao.Main"
+SERVER_NAME="com.coderxiao.WorkerMain"
 cd `dirname $0`
 BIN_DIR=`pwd`
 cd ..
@@ -44,4 +44,3 @@ PIDS=`ps -f | grep java | grep "$DEPLOY_DIR" | awk '{print $2}'`
 echo "PID: $PIDS"
 echo "STDOUT: $STDOUT_FILE"
 
-sh

@@ -53,6 +53,8 @@ public class WorkerScheduler extends DuplicateRemovedScheduler implements
 		}
 		Request request = null;
 		try{
+			//TODO
+			// 默认每一个Task都只有一个实例，若同一个Task有多个实例，那么这里将存在竞态条件
 			getUrlLock.lock();
 			request = queue.poll();
 			getUrlCondition.signalAll();

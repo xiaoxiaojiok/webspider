@@ -19,7 +19,6 @@
         <module>webspider-store/</module>
         <module>webspider-web</module>
         <module>webspider-plugin</module>
-                                                                                                                                           <module>webspider-plugin</module>
     </modules>
     
 	<repositories>
@@ -91,6 +90,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19</version>
                 <configuration>
                     <forkMode>pertest</forkMode>
                     <argLine>-Xms1024m -Xmx1024m -Xss1m </argLine>
@@ -117,6 +117,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
                     <excludes>
                         <exclude>log4j.xml</exclude>

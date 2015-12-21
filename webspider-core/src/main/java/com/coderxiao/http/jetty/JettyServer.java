@@ -1,8 +1,7 @@
 package com.coderxiao.http.jetty;
 
+import com.coderxiao.webspider.util.ConfigUtil;
 import org.eclipse.jetty.server.Server;
-
-import com.coderxiao.webspider.util.ConfigUtilInstance;
 
 /***
  * Jetty服务器
@@ -12,9 +11,9 @@ import com.coderxiao.webspider.util.ConfigUtilInstance;
  */
 public class JettyServer {
 
-	public static final String IP = ConfigUtilInstance.getInstance().getJettyIP();
-	public static final int PORT = ConfigUtilInstance.getInstance().getJettyPort();
-	public static final String CONTEXT = ConfigUtilInstance.getInstance().getJettyContext();
+	public static final String IP = ConfigUtil.getInstance().getJettyIP();
+	public static final int PORT = ConfigUtil.getInstance().getJettyPort();
+	public static final String CONTEXT = ConfigUtil.getInstance().getJettyContext();
 	public Server server = null;
 
 	/**

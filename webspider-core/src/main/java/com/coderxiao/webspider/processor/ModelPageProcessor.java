@@ -9,7 +9,7 @@ import com.coderxiao.webspider.Page;
 import com.coderxiao.webspider.Request;
 import com.coderxiao.webspider.ResultItems;
 import com.coderxiao.webspider.Site;
-import com.coderxiao.webspider.util.ConfigUtilInstance;
+import com.coderxiao.webspider.util.ConfigUtil;
 
 /***
  * 
@@ -21,10 +21,10 @@ import com.coderxiao.webspider.util.ConfigUtilInstance;
  */
 public class ModelPageProcessor implements PageProcessor {
 	
-	private static int retryTimes = ConfigUtilInstance.getInstance().getRetryTimes();//重试次数
-	private static int sleepTime = ConfigUtilInstance.getInstance().getSleepTime();//睡眠时间
-	private static int cycleRetryTimes = ConfigUtilInstance.getInstance().getCycleRetryTimes();//循环重试次数
-	private static String regex = ConfigUtilInstance.getInstance().getCharsetRegex();//提取页面编码正则表达式
+	private static int retryTimes = ConfigUtil.getInstance().getRetryTimes();//重试次数
+	private static int sleepTime = ConfigUtil.getInstance().getSleepTime();//睡眠时间
+	private static int cycleRetryTimes = ConfigUtil.getInstance().getCycleRetryTimes();//循环重试次数
+	private static String regex = ConfigUtil.getInstance().getCharsetRegex();//提取页面编码正则表达式
 	
 	private Site site = Site.me().setRetryTimes(retryTimes).setSleepTime(sleepTime)
 			.setCycleRetryTimes(cycleRetryTimes);

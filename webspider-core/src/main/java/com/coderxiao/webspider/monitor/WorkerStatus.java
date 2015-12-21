@@ -5,7 +5,7 @@ import java.util.Set;
 import com.coderxiao.webspider.scheduler.RedisScheduler;
 import com.coderxiao.webspider.scheduler.ScheduleType;
 import com.coderxiao.webspider.scheduler.SchedulerInstance;
-import com.coderxiao.webspider.util.ConfigUtilInstance;
+import com.coderxiao.webspider.util.ConfigUtil;
 
 public class WorkerStatus implements WorkerStatusMXBean{
 	
@@ -13,7 +13,7 @@ public class WorkerStatus implements WorkerStatusMXBean{
 
 	@Override
 	public String getWebServiceURL() {
-		return ConfigUtilInstance.getInstance().getWebserviceAddress();
+		return ConfigUtil.getInstance().getWebserviceAddress();
 	}
 
 	@Override
