@@ -14,6 +14,7 @@ import java.util.Properties;
 public class ConfigInfo extends AbstractInfo {
 
     public static final String CONFIG_PATH = RootInfo.ROOT_PATH + "/config";
+    public static final String CONFIG_STORE_TYPE_KEY = "pipeline.storageType";
 
     public ConfigInfo(){
         values = new Properties();

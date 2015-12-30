@@ -3,17 +3,11 @@ package com.coderxiao.admin.monitor;
 import com.coderxiao.admin.monitor.listener.NodeListener;
 import com.coderxiao.admin.monitor.listener.PathChildrenListener;
 import com.coderxiao.admin.util.ExecutorServiceUtil;
-import com.coderxiao.admin.util.RedisUtil;
 import com.coderxiao.admin.util.ZooKeeperUtil;
 import org.apache.curator.framework.recipes.cache.NodeCache;
-import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
-import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * <p>

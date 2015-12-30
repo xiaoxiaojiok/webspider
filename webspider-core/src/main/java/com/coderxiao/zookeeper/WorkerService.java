@@ -20,13 +20,18 @@ public class WorkerService {
         if(Worker.getInstance().getSpider(siteID) != null){
             return false;
         }
-        String[] allowRules = site.getProperty(SiteInfo.SITE_ALLOW_URL).trim().split("\\s+");
-        String[] startUrls = site.getProperty(SiteInfo.SITE_START_URL).trim().split("\\s+");
-        Spider spider = Spider.create(new ModelPageProcessor());
-        spider.getSite().setDepth(Integer.parseInt(site.getProperty(SiteInfo.SITE_DEPTH_LIMIT)))
-                .setAllowRules(allowRules).setId(siteID);;
-        spider.addUrl(startUrls);
-        Worker.getInstance().addSpider(spider);
+        synchronized (WorkerService.class) {
+            if(Worker.getInstance().getSpider(siteID) != null){
+                return false;
+            }
+            String[] allowRules = site.getProperty(SiteInfo.SITE_ALLOW_URL).trim().split("\\s+");
+            String[] startUrls = site.getProperty(SiteInfo.SITE_START_URL).trim().split("\\s+");
+            Spider spider = Spider.create(new ModelPageProcessor());
+            spider.getSite().setDepth(Integer.parseInt(site.getProperty(SiteInfo.SITE_DEPTH_LIMIT)))
+                    .setAllowRules(allowRules).setId(siteID);
+            spider.addUrl(startUrls);
+            Worker.getInstance().addSpider(spider);
+        }
         return true;
     }
 
@@ -54,6 +59,7 @@ public class WorkerService {
         Spider spider = Worker.getInstance().getSpider(siteID);
         if(spider == null){
             add(site, siteID);
+            spider = Worker.getInstance().getSpider(siteID);
         }
         if((spider.getStatus() == Spider.Status.Init) || (spider.getStatus() == Spider.Status.Stopped)){
             spider.start();
@@ -68,6 +74,7 @@ public class WorkerService {
         Spider spider = Worker.getInstance().getSpider(siteID);
         if(spider == null){
             add(site, siteID);
+            spider = Worker.getInstance().getSpider(siteID);
         }
         Worker.getInstance().updateSpider(spider);
         String[] allowRules = site.getProperty(SiteInfo.SITE_ALLOW_URL).trim().split("\\s+");

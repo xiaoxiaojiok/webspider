@@ -1,6 +1,9 @@
 package com.coderxiao.zookeeper.util;
 
 import com.coderxiao.webspider.util.ConfigUtil;
+import com.coderxiao.webspider.util.MongoUtil;
+import com.coderxiao.zookeeper.directory.webspider.config.ConfigInfo;
+import com.coderxiao.zookeeper.directory.webspider.config.mongo.MongoInfo;
 import com.coderxiao.zookeeper.directory.webspider.config.redis.RedisInfo;
 import com.coderxiao.zookeeper.directory.webspider.config.thread.ThreadInfo;
 import org.apache.curator.RetryPolicy;
@@ -117,6 +120,24 @@ public class ZooKeeperUtil {
         RedisInfo redisInfo = new RedisInfo();
         redisInfo.load();
         return redisInfo.getProperty(RedisInfo.REDIS_IP_KEY);
+    }
+
+    public String getMongoURL() {
+        MongoInfo mongoInfo = new MongoInfo();
+        mongoInfo.load();
+        return mongoInfo.getProperty(MongoInfo.MONGO_URL_KEY);
+    }
+
+    public String getMongoDB() {
+        MongoInfo mongoInfo = new MongoInfo();
+        mongoInfo.load();
+        return mongoInfo.getProperty(MongoInfo.MONGO_DB_KEY);
+    }
+
+    public String getStorageType(){
+        ConfigInfo configInfo = new ConfigInfo();
+        configInfo.load();
+        return configInfo.getProperty(ConfigInfo.CONFIG_STORE_TYPE_KEY);
     }
 
 }

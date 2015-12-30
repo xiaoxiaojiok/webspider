@@ -34,13 +34,6 @@ class SqlPool {
 	static {
 		try {
 			Properties prop = new Properties();
-		/*	InputStream is = SqlPool.class.getClassLoader()
-					.getResourceAsStream("db.properties");
-			if (is == null) {
-				throw new IllegalArgumentException(
-						"[db.properties] is not found!");
-			}
-			prop.load(is);*/
 			prop.load(new ByteArrayInputStream(Directory.getData(MysqlInfo.MYSQL_PATH)));
 			HikariConfig config = new HikariConfig(prop);
 			ds = new HikariDataSource(config);

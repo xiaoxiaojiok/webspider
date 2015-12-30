@@ -1,13 +1,15 @@
 package com.coderxiao.admin.directory.build;
 
-
 import com.coderxiao.admin.directory.webspider.RootInfo;
+import com.coderxiao.admin.directory.webspider.config.ConfigInfo;
+import com.coderxiao.admin.directory.webspider.config.mongo.MongoInfo;
 import com.coderxiao.admin.directory.webspider.config.mysql.MysqlInfo;
 import com.coderxiao.admin.directory.webspider.config.redis.RedisInfo;
 import com.coderxiao.admin.directory.webspider.config.thread.ThreadInfo;
 import com.coderxiao.admin.directory.webspider.sites.SitesInfo;
 import com.coderxiao.admin.directory.webspider.workers.WorkersInfo;
 import com.coderxiao.admin.util.ConfigUtil;
+import com.coderxiao.admin.util.StorageType;
 import com.coderxiao.admin.util.ZooKeeperUtil;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
@@ -41,6 +43,7 @@ public class Directory {
         }
 
         public Builder createConfig() {
+            create(MongoInfo.MONGO_PATH);
             create(MysqlInfo.MYSQL_PATH);
             create(RedisInfo.REDIS_PATH);
             create(ThreadInfo.THREAD_PATH);
@@ -103,6 +106,16 @@ public class Directory {
      *初始化配置信息
      */
     private static void init() {
+        //初始化数据储存到Mongo DB数据库中
+        ConfigInfo configInfo = new ConfigInfo();
+        configInfo.setProperty(ConfigInfo.CONFIG_STORE_TYPE_KEY, StorageType.MongoDB.value());
+        configInfo.save();
+
+        MongoInfo mongoInfo = new MongoInfo();
+        mongoInfo.setProperty(MongoInfo.MONGO_URL_KEY, ConfigUtil.one().getMongoURL());
+        mongoInfo.setProperty(MongoInfo.MONGO_DB_KEY, ConfigUtil.one().getMongoDB());
+        mongoInfo.save();
+
         MysqlInfo mysqlInfo = new MysqlInfo();
         mysqlInfo.setProperty(MysqlInfo.MYSQL_URL_KEY, ConfigUtil.one().getMysqlUrl());
         mysqlInfo.setProperty(MysqlInfo.MYSQL_USER_KEY,ConfigUtil.one().getMysqlUser());

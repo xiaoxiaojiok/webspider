@@ -90,7 +90,6 @@ public class DirectoryTest {
     public void testCreate1() {
         Directory.delete(WorkersInfo.WORKERS_PATH + "/host-2");
 //        Directory.setData(WorkersInfo.WORKERS_PATH + "/host-2","admin=123456".getBytes());
-
     }
 
     @Test

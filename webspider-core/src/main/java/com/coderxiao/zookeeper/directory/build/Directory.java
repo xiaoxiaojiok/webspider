@@ -1,5 +1,6 @@
 package com.coderxiao.zookeeper.directory.build;
 
+import com.coderxiao.zookeeper.directory.webspider.RootInfo;
 import com.coderxiao.zookeeper.util.ZooKeeperUtil;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
@@ -122,6 +123,17 @@ public class Directory {
             logger.error(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * 删除所有节点
+     */
+    public static void delete() {
+        try {
+            ZooKeeperUtil.one().getClient().delete().deletingChildrenIfNeeded().forPath(RootInfo.ROOT_PATH);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
     }
 
 }

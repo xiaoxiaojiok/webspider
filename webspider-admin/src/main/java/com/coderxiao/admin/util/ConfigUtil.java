@@ -153,4 +153,11 @@ public class ConfigUtil {
 		return Integer.parseInt(getConfig("spider.thread"));
 	}
 
+	public String getMongoURL(){
+		return getConfig("mongo.url");
+	}
+
+	public String getMongoDB() {
+		return getConfig("mongo.db");
+	}
 }

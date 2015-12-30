@@ -40,15 +40,13 @@ public class PathChildrenListener implements PathChildrenCacheListener{
 
         if (path.equals(SitesInfo.SITES_PATH)) {
             SiteInfo siteInfo = new SiteInfo(event.getData().getPath());
+            siteInfo.load();
             switch (event.getType()) {
                 case CHILD_ADDED:
                     logger.info("CHILD_ADDED#[ "+ node +" ]");
-                    siteInfo.load();
                     WorkerService.add(siteInfo,Long.parseLong(node));
-                    WorkerService.enable(siteInfo,Long.parseLong(node));
                     break;
                 case CHILD_UPDATED:
-                    siteInfo.load();
                     if (siteInfo.getProperty(SiteInfo.SITE_OPERATOR).equals(SiteInfo.OP_ENABLE)) {
                         logger.info("CHILD_UPDATED#[ "+ node +" ]" + SiteInfo.OP_ENABLE);
                         WorkerService.enable(siteInfo,Long.parseLong(node));

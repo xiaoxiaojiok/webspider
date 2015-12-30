@@ -7,6 +7,8 @@ import com.coderxiao.webspider.Request;
 import com.coderxiao.webspider.Task;
 
 import com.coderxiao.webspider.util.ConfigUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -33,17 +35,16 @@ public class RedisScheduler implements MonitorableScheduler{
 	public static final String WEBSERVICE_KEY = "webservice_key";
     
 	protected static final JedisPoolConfig jedisPoolConfig= new JedisPoolConfig();
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     
 	static{
-		int maxIdel = ConfigUtil.getInstance().getRedisMaxIdel();
 		int maxTotal = ConfigUtil.getInstance().getRedisMaxTotal();
 		long maxWait = ConfigUtil.getInstance().getRedisMaxWait();
-		boolean testOnBorrow = ConfigUtil.getInstance().getRedisTestOnBorrow();
 		host = ConfigUtil.getInstance().getRedisIP();
-    	jedisPoolConfig.setMaxIdle(maxIdel);
     	jedisPoolConfig.setMaxTotal(maxTotal);
     	jedisPoolConfig.setMaxWaitMillis(maxWait);
-    	jedisPoolConfig.setTestOnBorrow(testOnBorrow);
+    	jedisPoolConfig.setTestOnBorrow(true);
 	}
 
     public RedisScheduler(){
@@ -52,31 +53,37 @@ public class RedisScheduler implements MonitorableScheduler{
 
     @Override
     public void push(Request request, Task task) {
-    	// 从池中获取一个Jedis对象 
-        Jedis jedis = pool.getResource();
-        try{
+        Jedis jedis = null;
+        try {
+            // 从池中获取一个Jedis对象
+            jedis = pool.getResource();
             //使用SortedSet进行url去重
-            if (jedis.zrank(SET_PREFIX+task.getUUID(),request.getUrl())==null || shouldReserved(request)){
+            if (jedis.zrank(SET_PREFIX + task.getUUID(), request.getUrl()) == null || shouldReserved(request)) {
                 //使用List保存队列
-                jedis.rpush(QUEUE_PREFIX+task.getUUID(),JSON.toJSONString(request));
-                jedis.zadd(SET_PREFIX+task.getUUID(),System.currentTimeMillis(),request.getUrl());
+                jedis.rpush(QUEUE_PREFIX + task.getUUID(), JSON.toJSONString(request));
+                jedis.zadd(SET_PREFIX + task.getUUID(), System.currentTimeMillis(), request.getUrl());
             }
-        }finally{
-            // 释放对象池  
-            pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally {
+            // 释放对象
+            release(jedis);
         }
     }
 
+
     @Override
     public Request poll(Task task) {
-    	// 从池中获取一个Jedis对象 
-        Jedis jedis = pool.getResource();
         String request = null;
+        Jedis jedis = null;
         try{
+            // 从池中获取一个Jedis对象
+            jedis = pool.getResource();
             request = jedis.lpop(QUEUE_PREFIX+task.getUUID());
-        // 释放对象池
-        }finally{
-        	pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
         if (request==null) {
             return null;
@@ -97,13 +104,15 @@ public class RedisScheduler implements MonitorableScheduler{
      * @return 被删除的key数量
      */
     public Long del(String key){
-    	Long status;
-    	Jedis jedis = pool.getResource();
+    	Long status = 0L;
+        Jedis jedis = null;
         try{
+            jedis = pool.getResource();
         	status = jedis.del(key);
-        // 释放对象池  
-        }finally{
-        	 pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
     	return status;
     }
@@ -117,14 +126,17 @@ public class RedisScheduler implements MonitorableScheduler{
      * @param value 
      */
     public void zadd(String key,String value){
-    	Jedis jedis = pool.getResource();
+    	Jedis jedis = null;
         try{
+            jedis = pool.getResource();
             //使用SortedSet进行url去重
             if (jedis.zrank(key,value)==null){
                 jedis.zadd(key,System.currentTimeMillis(),value);
             }
-        }finally{
-        	 pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
     }
     
@@ -136,12 +148,15 @@ public class RedisScheduler implements MonitorableScheduler{
      * @param key 
      */
     public long zcard(String key){
-    	Jedis jedis = pool.getResource();
+    	Jedis jedis = null;
         long total = 0;
         try{
+            jedis = pool.getResource();
         	total = jedis.zcard(key);
-        }finally{
-        	pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
 		return total;
     }
@@ -155,12 +170,15 @@ public class RedisScheduler implements MonitorableScheduler{
      * @return 被删除的key数量
      */
     public long zrem(String key,String... value){
-    	Jedis jedis = pool.getResource();
+        Jedis jedis = null;
         long total = 0;
         try{
+            jedis = pool.getResource();
         	total = jedis.zrem(key,value);
-        }finally{
-        	pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
 		return total;
     }
@@ -173,12 +191,15 @@ public class RedisScheduler implements MonitorableScheduler{
      * @param key 
      */
     public Set<String> zrange(String key,long start,long stop){
-    	Jedis jedis = pool.getResource();
+    	Jedis jedis = null;
         Set<String> total = null;
         try{
+            jedis = pool.getResource();
         	total = jedis.zrange(key,start,stop);
-        }finally{
-        	pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
 		return total;
     }
@@ -190,12 +211,15 @@ public class RedisScheduler implements MonitorableScheduler{
      */
 	@Override
 	public long getLeftRequestsCount(Task task) {
-		Jedis jedis = pool.getResource();
+		Jedis jedis = null;
         long total = 0;
         try{
+            jedis = pool.getResource();
         	total = jedis.llen(QUEUE_PREFIX+task.getUUID());
-        }finally{
-        	pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
 		return total;
 	}
@@ -208,12 +232,15 @@ public class RedisScheduler implements MonitorableScheduler{
      */
 	@Override
 	public long getTotalRequestsCount(Task task) {
-		Jedis jedis = pool.getResource();
+		Jedis jedis = null;
         long total = 0;
         try{
+            jedis = pool.getResource();
         	total = jedis.zcard(SET_PREFIX+task.getUUID());
-        }finally{
-        	pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
         }
 		return total;
 	}
@@ -222,11 +249,25 @@ public class RedisScheduler implements MonitorableScheduler{
      * 清空当前数据库
      */
     public void flushDB() {
-        Jedis jedis = pool.getResource();
+        Jedis jedis = null;
         try{
+            jedis = pool.getResource();
             jedis.flushDB();
-        }finally{
-            pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
+        }
+    }
+
+    /**
+     * 释放Jedis
+     *
+     * @param jedis
+     */
+    protected void release(final Jedis jedis) {
+        if (jedis != null) {
+            jedis.close();
         }
     }
 }

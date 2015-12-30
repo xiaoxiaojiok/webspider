@@ -55,13 +55,11 @@ public class ConfigUtil {
 	
 	public int getWorkerThread(){
 		return ZooKeeperUtil.one().getWorkerThread();
-//		return Integer.parseInt(getConfig("worker.threads"));
 
 	}
 	
 	public int getSpiderThread(){
 		return ZooKeeperUtil.one().getSpiderThread();
-//		return Integer.parseInt(getConfig("spider.thread"));
 	}
 	
 	public String getWebserviceAddress(){
@@ -87,36 +85,27 @@ public class ConfigUtil {
 	
 	public String getCharsetRegex(){
 		return "<meta[^>]*?charset[\\s]*=[\\s]*['|\"]?([a-z|A-Z|0-9]*[\\-]*[0-9]*)[\\s|\\S]*['|\"]?";
-//		return getConfig("site.charset.regex");
 	}
 	
 	public int getRedisMaxIdel(){
 		return ZooKeeperUtil.one().getRedisMaxIdel();
-//		return Integer.parseInt(getConfig("redis.pool.maxIdle"));
 
 	}
 	
 	public int getRedisMaxTotal(){
 		return ZooKeeperUtil.one().getRedisMaxTotal();
-//		return Integer.parseInt(getConfig("redis.pool.maxTotal"));
 	}
 	
 	public long getRedisMaxWait(){
 		return ZooKeeperUtil.one().getRedisMaxWait();
-//		return Long.parseLong(getConfig("redis.pool.maxWait"));
-	}
-	
-	public boolean getRedisTestOnBorrow(){
-		return Boolean.parseBoolean(getConfig("redis.pool.testOnBorrow"));
 	}
 	
 	public String getRedisIP(){
 		return ZooKeeperUtil.one().getRedisIP();
-//		return getConfig("redis.ip");
 	}
 	
 	public String getStorageType(){
-		return getConfig("pipeline.storageType");
+		return ZooKeeperUtil.one().getStorageType();
 	}
 	
 	public String getMysqlIP(){
@@ -161,5 +150,13 @@ public class ConfigUtil {
 
 	public int getZkTimeout(){
 		return Integer.parseInt(getConfig("zookeeper.timeout"));
+	}
+
+	public String getMongoURL(){
+		return ZooKeeperUtil.one().getMongoURL();
+	}
+
+	public String getMongoDB() {
+		return ZooKeeperUtil.one().getMongoDB();
 	}
 }

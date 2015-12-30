@@ -2,8 +2,6 @@ package com.coderxiao.admin.directory.webspider.master;
 
 import com.coderxiao.admin.directory.webspider.AbstractInfo;
 import com.coderxiao.admin.directory.webspider.RootInfo;
-import com.coderxiao.admin.directory.webspider.config.ConfigInfo;
-import com.coderxiao.admin.util.ConfigUtil;
 
 import java.util.Properties;
 

@@ -22,6 +22,9 @@ public class PipelineFactory {
 		if(StorageType.LocalFile.value().equals(type)){
 			return new HTMLPipeline(PIPELINE_PATH);
 		}
+		if (StorageType.MongoDB.value().equals(type)) {
+			return new MongoPipeline();
+		}
 		return new HTMLPipeline(PIPELINE_PATH);
 	}
 

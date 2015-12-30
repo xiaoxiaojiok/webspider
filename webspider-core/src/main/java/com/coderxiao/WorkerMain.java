@@ -31,6 +31,8 @@ public class WorkerMain {
             for (String site : sites) {
                 SiteInfo siteInfo = new SiteInfo(BASE_PATH + site);
                 siteInfo.load();
+                //TODO
+                //默认一开始爬取所有，应该按照siteInfo的OPERATOR来决定,只有enable和update的才enable
                 WorkerService.add(siteInfo, Long.parseLong(site));
                 WorkerService.enable(siteInfo,Long.parseLong(site));
             }

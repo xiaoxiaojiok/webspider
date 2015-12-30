@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import javax.management.JMException;
 
 import com.coderxiao.webspider.util.ConfigUtil;
+import com.coderxiao.webspider.util.MongoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,7 +89,7 @@ public class Worker {
 			logger.info(e.getMessage());
 		}
 		redis.zadd(RedisScheduler.SITE_KEY, spider.getSite().getId().toString());
-		if (StorageType.Mysql.toString().equals(STORAGE_TYPE)) {
+		if (StorageType.Mysql.value().equals(STORAGE_TYPE)) {
 			MySQL.create(MySQL.TABLE_PREFIX + spider.getSite().getId());
 		}
 		spiderMap.put(spider.getSite().getId(), spider);
@@ -124,8 +125,11 @@ public class Worker {
 		redis.del(RedisScheduler.QUEUE_PREFIX + spider.getUUID());
 		redis.del(RedisScheduler.SET_PREFIX + spider.getUUID());
 		redis.zrem(RedisScheduler.SITE_KEY, spider.getSite().getId().toString());
-		if (StorageType.Mysql.toString().equals(STORAGE_TYPE)) {
+		if (StorageType.Mysql.value().equals(STORAGE_TYPE)) {
 			MySQL.drop(MySQL.TABLE_PREFIX + spider.getSite().getId());
+		}
+		if (StorageType.MongoDB.value().equals(STORAGE_TYPE)) {
+			MongoUtil.one().dropCollection(MongoUtil.COLLECTION_PREFIX + spider.getSite().getId());
 		}
 		spiderMap.remove(spider.getSite().getId());
 		return true;
@@ -144,7 +148,8 @@ public class Worker {
 		redis.del(RedisScheduler.SET_PREFIX + spider.getUUID());
 		redis.zadd(RedisScheduler.SITE_KEY, spider.getSite().getId().toString());
 		if (StorageType.Mysql.toString().equals(STORAGE_TYPE)) {
-			MySQL.delete(MySQL.TABLE_PREFIX + spider.getSite().getId(), null);
+			//TODO
+//			MySQL.delete(MySQL.TABLE_PREFIX + spider.getSite().getId(), null);
 		}
 		return true;
 	}

@@ -31,31 +31,37 @@ public class DepthRedisScheduler extends RedisScheduler {
 	            }
 	        }
 	        
-    	// 从池中获取一个Jedis对象 
-        Jedis jedis = pool.getResource();
+        Jedis jedis = null;
         try{
+            // 从池中获取一个Jedis对象
+            jedis = pool.getResource();
             //使用SortedSet进行url去重
             if (jedis.zrank(SET_PREFIX+task.getUUID(),request.getUrl())==null || shouldReserved(request)){
                 //使用List保存队列
                 jedis.rpush(QUEUE_PREFIX+task.getUUID(),JSON.toJSONString(request));
                 jedis.zadd(SET_PREFIX+task.getUUID(),System.currentTimeMillis(),request.getUrl());
             }
-        }finally{
-            // 释放对象池  
-            pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            // 释放对象
+            release(jedis);
         }
     }
 
     @Override
     public Request poll(Task task) {
-    	// 从池中获取一个Jedis对象 
-        Jedis jedis = pool.getResource();
+        Jedis jedis = null;
         String request = null;
         try{
+            // 从池中获取一个Jedis对象
+            jedis = pool.getResource();
             request = jedis.lpop(QUEUE_PREFIX+task.getUUID());
-        // 释放对象池  
-        }finally{
-        	 pool.returnResource(jedis);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            // 释放对象
+            release(jedis);
         }
         if (request==null) {
             return null;

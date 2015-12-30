@@ -73,6 +73,7 @@ public class SpiderServiceImpl implements SpiderService{
 			return SpiderStatus.notexist;
 		}
 		//TODO
+		//应该检测sites下的节点operator字段
 		return SpiderStatus.running;
 	}
 
