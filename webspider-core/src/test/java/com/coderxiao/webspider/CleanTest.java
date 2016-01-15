@@ -4,7 +4,6 @@ import com.coderxiao.webspider.scheduler.RedisScheduler;
 import com.coderxiao.webspider.util.ConfigUtil;
 import com.coderxiao.webspider.util.MongoUtil;
 import com.coderxiao.zookeeper.directory.build.Directory;
-import com.coderxiao.zookeeper.directory.webspider.RootInfo;
 import org.junit.Test;
 
 /**

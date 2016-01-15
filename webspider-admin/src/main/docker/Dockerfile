@@ -18,7 +18,7 @@ RUN mkdir /java
 ADD jdk-8u60-linux-x64.tar.gz /java/
 ADD webspider-admin-1.0.0-release.tar.gz /
 RUN echo "export JAVA_HOME=/java/jdk1.8.0_60" >> /etc/profile
-RUN echo "export PATH=$PATH:$JAVA_HOME/bin" >> /etc/profile
+RUN echo "export PATH=$PATH:/java/jdk1.8.0_60/bin" >> /etc/profile
 
 EXPOSE 22 8888 9090 9999
 
