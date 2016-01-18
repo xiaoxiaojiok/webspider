@@ -1,6 +1,7 @@
 package com.coderxiao;
 
 import com.coderxiao.http.jetty.JettyServer;
+import com.coderxiao.webspider.util.ConfigUtil;
 import com.coderxiao.webspider.util.IPUtils;
 import com.coderxiao.zookeeper.WorkerService;
 import com.coderxiao.zookeeper.directory.build.Directory;
@@ -19,10 +20,24 @@ public class WorkerMain {
 
     private static final String BASE_PATH = SitesInfo.SITES_PATH + Directory.SEPARATOR;
 
+    public static final String HOST_IP = "HOST_IP";
+    public static final String JETTY_PORT = "JETTY_PORT";
+
     public static void main(String[] args) {
 
+        //若运行在Docker中，则得到宿主机IP地址
+        String hostIP = System.getProperty(HOST_IP);
+        String ip = null;
+        if (hostIP != null) {
+            ip = hostIP;
+        }else{
+            ip =  IPUtils.getRealIp();
+        }
+
+        String jettyPort = System.getProperty(JETTY_PORT);
+
         //worker上线
-        WorkerInfo workerinfo = new WorkerInfo(WorkersInfo.WORKERS_PATH + Directory.SEPARATOR + IPUtils.getRealIp() + "-");
+        WorkerInfo workerinfo = new WorkerInfo(WorkersInfo.WORKERS_PATH + Directory.SEPARATOR + ip + ":" + jettyPort + "-");
         workerinfo.create();
 
         //初始化，为当前worker分配站点

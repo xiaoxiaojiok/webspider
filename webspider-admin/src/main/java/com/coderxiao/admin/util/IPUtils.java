@@ -15,6 +15,7 @@ import java.util.Enumeration;
 public class IPUtils {
 
 	public static String getRealIp(){
+
 		String localip = null;// 本地IP，如果没有配置外网IP则返回它
 		String netip = null;// 外网IP
 

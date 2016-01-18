@@ -26,6 +26,7 @@ import java.io.IOException;
  * Created by XiaoJian on 2015/12/15.
  */
 public class Master extends LeaderSelectorListenerAdapter implements Closeable{
+    public static final String HOST_IP = "HOST_IP";
     private final String name;
     private Logger logger = Logger.getLogger(getClass());
     private final LeaderSelector leaderSelector;
@@ -66,14 +67,28 @@ public class Master extends LeaderSelectorListenerAdapter implements Closeable{
             Directory.create();
         }
 
+        //若运行在Docker中，则得到宿主机IP映射后的WebService地址
+        String dockerIP = System.getProperty(HOST_IP);
+        String webServiceAddress = null;
+        if (dockerIP != null) {
+            webServiceAddress = ConfigUtil.one().getDockerWebserviceAddress(dockerIP);
+        }else{
+            webServiceAddress =  ConfigUtil.one().getWebserviceAddress();
+        }
+
         //设置当前webservice地址
         MasterInfo masterInfo = new MasterInfo();
-        masterInfo.setProperty(MasterInfo.MASTER_WEBSERVICE_ADDRESS_KEY, ConfigUtil.one().getWebserviceAddress());
+        masterInfo.setProperty(MasterInfo.MASTER_WEBSERVICE_ADDRESS_KEY,webServiceAddress);
         masterInfo.save();
 
         //更新Redis的webservice地址
         RedisUtil.one().del(RedisUtil.WEBSERVICE_KEY);
-        RedisUtil.one().zadd(RedisUtil.WEBSERVICE_KEY,ConfigUtil.one().getWebserviceAddress());
+        RedisUtil.one().zadd(RedisUtil.WEBSERVICE_KEY,webServiceAddress);
+
+        //初始化Docker端口的开始地址
+        if (!RedisUtil.one().exists(RedisUtil.DOCKER_PORT_KEY)) {
+            RedisUtil.one().set(RedisUtil.DOCKER_PORT_KEY,ConfigUtil.one().getDockerPortStart());
+        }
 
 
         //监听workers子节点

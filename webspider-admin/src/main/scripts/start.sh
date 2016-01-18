@@ -1,4 +1,5 @@
 #!/bin/bash
+
 SERVER_NAME="com.coderxiao.MasterMain"
 cd `dirname $0`
 BIN_DIR=`pwd`
@@ -24,7 +25,7 @@ if [ "$1" = "debug" ]; then
 fi
 JAVA_JMX_OPTS=""
 if [ "$1" = "jmx" ]; then
-    JAVA_JMX_OPTS=" -Djava.rmi.server.hostname=198.11.180.44 -Dcom.sun.management.jmxremote.port=9090 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
+    JAVA_JMX_OPTS=" -Djava.rmi.server.hostname=$HOST_IP -Dcom.sun.management.jmxremote.port=9090 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
 fi
 JAVA_MEM_OPTS=""
 BITS=`java -version 2>&1 | grep -i 64-bit`
@@ -34,10 +35,10 @@ else
     JAVA_MEM_OPTS=" -server -Xms1g -Xmx1g -XX:PermSize=128m -XX:SurvivorRatio=2 -XX:+UseParallelGC "
 fi
 
-
-echo "nohup java $JAVA_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS $SERVER_NAME > $STDOUT_FILE 2>&1 &"
+JAVA_DOCKER_OPTS=" -DHOST_IP=$HOST_IP "
+echo "nohup java $JAVA_DOCKER_OPTS $JAVA_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS $SERVER_NAME > $STDOUT_FILE 2>&1 &"
 echo -e "Starting the $SERVER_NAME ...\c"
-nohup java $JAVA_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS $SERVER_NAME > $STDOUT_FILE 2>&1 &
+nohup java $JAVA_DOCKER_OPTS $JAVA_OPTS $JAVA_DEBUG_OPTS $JAVA_JMX_OPTS -classpath $CONF_DIR:$LIB_JARS $SERVER_NAME > $STDOUT_FILE 2>&1 &
 
 echo "OK!"
 PIDS=`ps -f | grep java | grep "$DEPLOY_DIR" | awk '{print $2}'`

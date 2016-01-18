@@ -69,6 +69,14 @@ public class ConfigUtil {
 		return address;
 	}
 
+	public String getDockerWebserviceAddress(String ip){
+		if(ip == null){
+			ip = "localhost";
+		}
+		String address = "http://" + ip +":"+ getConfig("webservice.port") + getConfig("webservice.address");
+		return address;
+	}
+
 	public int getRedisMaxIdel(){
 		return Integer.parseInt(getConfig("redis.pool.maxIdle"));
 	}
@@ -159,5 +167,9 @@ public class ConfigUtil {
 
 	public String getMongoDB() {
 		return getConfig("mongo.db");
+	}
+
+	public String getDockerPortStart() {
+		return getConfig("docker.port.start");
 	}
 }

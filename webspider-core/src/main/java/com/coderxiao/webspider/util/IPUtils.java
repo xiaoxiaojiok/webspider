@@ -7,7 +7,17 @@ import java.util.Enumeration;
 
 public class IPUtils {
 
+	public static final String DOCKER_IP = "DOCKER_IP";
+
 	public static String getRealIp(){
+
+		String dockerIP = System.getProperty(DOCKER_IP);
+
+		//若运行在Docker中，则返回Docker所在的宿主机地址
+		if (dockerIP != null) {
+			return dockerIP;
+		}
+
 		String localip = null;// 本地IP，如果没有配置外网IP则返回它
 		String netip = null;// 外网IP
 

@@ -33,6 +33,8 @@ public class RedisScheduler implements MonitorableScheduler{
 	public static final String SITE_KEY = "site_key";
 	
 	public static final String WEBSERVICE_KEY = "webservice_key";
+
+    public static final String DOCKER_PORT_KEY = "docker_port_key";
     
 	protected static final JedisPoolConfig jedisPoolConfig= new JedisPoolConfig();
 
@@ -244,6 +246,70 @@ public class RedisScheduler implements MonitorableScheduler{
         }
 		return total;
 	}
+
+    /**
+     * <pre>
+     *     对key对应的数字做加1操作,如果key不存在，那么在操作之前，这个key对应的值会被置为0
+     * </pre>
+     * @param key 要操作的key
+     * @return 返回操作后key的值
+     */
+    public Long incr(String key) {
+        Jedis jedis = null;
+        Long result = null;
+        try{
+            jedis = pool.getResource();
+            result = jedis.incr(key);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
+        }
+        return result;
+    }
+
+    /**
+     * <pre>
+     *     判断key是否存在
+     * </pre>
+     * @param key
+     * @return true 如果key存在 / false 如果key不存在
+     */
+    public Boolean exists(String key) {
+        Jedis jedis = null;
+        Boolean result = null;
+        try{
+            jedis = pool.getResource();
+            result = jedis.exists(key);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
+        }
+        return result;
+    }
+
+    /**
+     * <pre>
+     *     将key和value对应，如果key已经存在了，它将会被覆盖而不管它是什么类型
+     * </pre>
+     * @param key
+     * @param value
+     * @return
+     */
+    public String set(String key,String value) {
+        Jedis jedis = null;
+        String result = null;
+        try{
+            jedis = pool.getResource();
+            result = jedis.set(key, value);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        } finally{
+            release(jedis);
+        }
+        return result;
+    }
 
     /**
      * 清空当前数据库
