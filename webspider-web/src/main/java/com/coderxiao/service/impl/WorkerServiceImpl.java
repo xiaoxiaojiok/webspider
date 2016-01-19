@@ -14,6 +14,8 @@ import java.util.List;
 public class WorkerServiceImpl implements WorkerService{
 
     public static final String WORKERS_PATH = "/webspider/workers";
+    public static final String SITES_PATH = "/webspider/sites";
+
 
     public List<String> getWorkerURLs() {
         List<String> list = ZooKeeperUtil.one().getChildren(WORKERS_PATH);
@@ -23,5 +25,15 @@ public class WorkerServiceImpl implements WorkerService{
             workerURLs.add(path.split("-")[0]);
         }
         return workerURLs;
+    }
+
+    public List<String> getAllSites() {
+        List<String> list = ZooKeeperUtil.one().getChildren(SITES_PATH);
+        if(list == null) return null;
+        List<String> sites = new ArrayList<String>();
+        for (String path : list) {
+            sites.add(path);
+        }
+        return sites;
     }
 }

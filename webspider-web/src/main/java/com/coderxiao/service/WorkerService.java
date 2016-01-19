@@ -7,5 +7,7 @@ import java.util.List;
  */
 public interface WorkerService {
 
-    public List<String> getWorkerURLs();
+    List<String> getWorkerURLs();
+
+    List<String> getAllSites();
 }

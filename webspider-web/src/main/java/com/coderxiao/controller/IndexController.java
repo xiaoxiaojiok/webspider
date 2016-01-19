@@ -31,8 +31,9 @@ public class IndexController {
 	public ModelAndView workers(){
 		ModelAndView modelAndView = new ModelAndView();
 		List<String> workerURLs = workerService.getWorkerURLs();
-		logger.info(workerURLs.toString());
+		List<String> allSites = workerService.getAllSites();
 		modelAndView.addObject("workerURLs", workerURLs);
+		modelAndView.addObject("allSites", allSites);
 		modelAndView.setViewName("workerList");
 		return modelAndView;
 	}

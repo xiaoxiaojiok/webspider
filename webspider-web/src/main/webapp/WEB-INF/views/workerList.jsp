@@ -11,17 +11,28 @@
    <title>Webspider</title>
    <style type="text/css">
    .worker{
-            margin:0px auto;
             text-align:center;
     }
    </style>
 </head>
 	
 <body>
-		<c:forEach items="${workerURLs}" var="worker">
-		<div class="worker">
-				<a href="http://${worker}" >${worker}</a>
-		</div>
-		</c:forEach>
+                <div class="worker">
+                <br/>
+                    Sites：<br/>
+                        <div>
+                            <c:forEach items="${allSites}" var="site">
+                                    <a href="#" >${site}</a>
+
+                            </c:forEach>
+                        </div>
+                        <br/>
+                    Worker主机：<br/>
+                        <div>
+                        <c:forEach items="${workerURLs}" var="worker">
+                                <a href="http://${worker}" >${worker}</a>
+                        </c:forEach>
+                        </div>
+        		</div>
 </body>
 </html>
