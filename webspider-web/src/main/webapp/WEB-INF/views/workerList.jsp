@@ -14,10 +14,26 @@
             text-align:center;
     }
    </style>
+
+   <script type="text/javascript">
+
+   $(document).ready(function(){
+     $("button").click(function(){
+       $.getJSON("http://198.11.180.44:12012/spider?callback=?",function(result){
+       alert(result);
+         $.each(result, function(i, field){
+           $("p").append(field + " ");
+         });
+       });
+     });
+   });
+   </script>
 </head>
 	
 <body>
                 <div class="worker">
+                <button>获得 JSON 数据</button>
+                <p></p>
                 <br/>
                     Sites：<br/>
                         <div>
