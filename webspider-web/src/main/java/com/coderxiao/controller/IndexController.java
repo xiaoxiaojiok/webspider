@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.xml.MarshallingView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,4 +38,24 @@ public class IndexController {
 		modelAndView.setViewName("workerList");
 		return modelAndView;
 	}
+
+    @RequestMapping("test")
+    public ModelAndView spiderStatus(){
+        ModelAndView modelAndView = new ModelAndView();
+        List<String> workerURLs = workerService.getWorkerURLs();
+        List<String> allSites = workerService.getAllSites();
+        List<String> spiderURLs = new ArrayList<String>();
+
+        for(int i=0; i<workerURLs.size(); i++){
+            for(int j=0; j<allSites.size(); j++){
+                String tmp = workerURLs.get(i) + "/spider/" + allSites.get(j);
+                spiderURLs.add(tmp);
+            }
+        }
+
+        modelAndView.addObject("spiderURLs", spiderURLs);
+        modelAndView.setViewName("display");
+        return modelAndView;
+    }
+
 }
