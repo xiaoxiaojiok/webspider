@@ -44,16 +44,18 @@ public class IndexController {
         ModelAndView modelAndView = new ModelAndView();
         List<String> workerURLs = workerService.getWorkerURLs();
         List<String> allSites = workerService.getAllSites();
-        List<String> spiderURLs = new ArrayList<String>();
+        //List<String> spiderURLs = new ArrayList<String>();
 
-        for(int i=0; i<workerURLs.size(); i++){
+        /*for(int i=0; i<workerURLs.size(); i++){
             for(int j=0; j<allSites.size(); j++){
                 String tmp = workerURLs.get(i) + "/spider/" + allSites.get(j);
                 spiderURLs.add(tmp);
             }
-        }
+        }*/
 
-        modelAndView.addObject("spiderURLs", spiderURLs);
+        modelAndView.addObject("workerURLs", workerURLs);
+        //modelAndView.addObject("spiderURLs", spiderURLs);
+        modelAndView.addObject("spiderId", allSites);
         modelAndView.setViewName("display");
         return modelAndView;
     }
